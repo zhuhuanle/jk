@@ -1,5 +1,21 @@
 4.总结
-1.不同的gc策略对于堆内存的分配从512m，增加到1024m再增加到4096m youngGC发生次数减少，FullGC个别情况不发生。
-2.对于串行gc，内存增大到4096m后。gullgc时间明显增加
-3.1g-4g并行gc大多数情况下比较使用
-4.对于4-8g的堆内存G1gc性能比较好
+1.串行gc
+  1.1 xmx512m xms512m 只发生defNewGC  生成对象8000左右 最长时间0.035s 基本0.020s
+  1.2 xmx1g xms1g 只发生defNewGC  生成对象11000左右 最长时间0.050s 基本在0.050s
+  1.3 xmx2g xms2g 只发生defNewGC  生成对象12000左右 最长时间0.090s 基本在0.080s
+  对于串行gc 内存增大内存 gc时间增长，次数减少
+2.并行GC
+  2.1 Xms512m Xms512m youngGc 最长时间0.010s 最短0.003s fullGC 3次 0.060s 生成对象7000
+  2.2 Xms1g Xms1g youngGc 最长时间0.025s 最短0.009s fullGC 1次 0.070s 生成对象 11000
+  2.3 Xms1g Xms1g youngGc 最长时间0.060s 最短0.030s 无fullGC  生成对象13500
+  内存增大 youngGc次数减少 youngGc时间增长 fullGc次数减少
+3.cmsGc
+ 3.1 Xms512m Xmx512m youngGc最长0.030s 最短0.010s 发生3次fullGc 产生对象9200
+ 3.2 Xms1g Xmx1g youngGC 最长0.050s最短0.020s 发送1次fullGC 初始标记和并发标记时间总和0.001s 产生对象11600
+ 3.3 Xms2g Xmx2g youngGc 最长0.080s 最短0.050s 未发生fullGC 产生对象12200
+ 内存增大 youngGc次数减少 youngGc时间增长 fullGc次数减少
+4.G1GC
+ 4.1 Xms512m Xmx512m youngGc最长0.010 生成对象6010
+ 4.2 Xms1g Xmx1g youngGc最长0.002 生成对象7600
+ 4.2 Xms2g Xmx2g youngGc最长0.030 生成对象9600
+ 内存较小 g1内存优势不明显
