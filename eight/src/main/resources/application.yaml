@@ -1,0 +1,6 @@
+mybatis-plus:
+  mapperLocations: classpath:mybatis/*.xml
+  typeAliasesPackage: com.jk.seven.entity
+spring:
+  main:
+    allow-bean-definition-overriding: true
